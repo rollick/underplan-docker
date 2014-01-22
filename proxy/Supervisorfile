@@ -1,0 +1,8 @@
+[program:nginx]
+command=/usr/sbin/nginx -c /etc/nginx/nginx.conf -g "worker_processes 2; daemon off;"
+numprocs=1
+redirect_stderr=true
+autostart=true
+startsecs=10
+startretries=3
+autorestart=true

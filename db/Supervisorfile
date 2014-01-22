@@ -1,0 +1,16 @@
+[program:mongodb]
+priority=1
+command=/usr/bin/mongod --bind_ip 0.0.0.0 --journal --config /etc/mongodb.conf --logpath=/dev/stdout --dbpath=/db-data
+numprocs=1
+autostart=true
+autorestart=true
+startsecs=2
+startretries=3
+
+[program:cron]
+priority=2
+command=cron -f
+numprocs=1
+autostart=true
+autorestart=true
+startretries=3

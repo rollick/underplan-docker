@@ -1,0 +1,12 @@
+[program:node]
+priority=20
+environment=UNDERPLAN_PATH="/site-data/underplan",
+            MAIL_URL="smtp://localhost:25/",
+            PORT=3000
+directory=/site-data/underplan/
+command=/usr/bin/nodejs main.js
+numprocs=1
+autostart=true
+autorestart=true
+startsecs=10
+startretries=3
