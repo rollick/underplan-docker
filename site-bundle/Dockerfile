@@ -55,6 +55,3 @@ RUN npm install -g meteorite
 # Ensure bitbucket public key has already been accepted
 RUN echo "|1|Lh1C7wk23V6hmT8mmf4LFkW5pZA=|GUrsD6+i36DjgKVjwxpQ/AuXEqg= ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==" >> /root/.ssh/known_hosts
 ENV PKEY /root/.ssh/id_rsa
-
-# Bundle app into shared volume: /var/www/underplan
-CMD ["/root/start.sh"]

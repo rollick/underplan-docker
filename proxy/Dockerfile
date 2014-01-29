@@ -32,15 +32,17 @@ RUN sed -i '/worker_processes/d' /etc/nginx/nginx.conf
 
 # Setup SSL certs
 RUN mkdir /etc/nginx/ssl
-ADD ssl/server.key /etc/nginx/ssl/
-ADD ssl/server.crt /etc/nginx/ssl/
-RUN chmod 600 /etc/nginx/ssl/server.key
-RUN chmod 644 /etc/nginx/ssl/server.crt
+ADD ssl/underplan.io.key /etc/nginx/ssl/
+ADD ssl/underplan.io.combined.crt /etc/nginx/ssl/
+RUN chmod 600 /etc/nginx/ssl/underplan.io.key
+RUN chmod 644 /etc/nginx/ssl/underplan.io.combined.crt
 
 # Add conf for underplan
 ADD sites-available/underplan /etc/nginx/sites-available/
-ADD sites-available/upstream.template $HOME/
+ADD sites-available/underplan-ssl /etc/nginx/sites-available/
+ADD sites-available/upstream-ssl.template $HOME/
 RUN ln -sf /etc/nginx/sites-available/underplan /etc/nginx/sites-enabled/underplan
+RUN ln -sf /etc/nginx/sites-available/underplan-ssl /etc/nginx/sites-enabled/underplan-ssl
 
 # Remove default config
 RUN rm /etc/nginx/sites-enabled/default
@@ -57,6 +59,3 @@ ADD Supervisorfile /etc/supervisor/conf.d/nginx.conf
 ADD start.sh $HOME/
 RUN chmod +x $HOME/start.sh
 RUN chown root: $HOME/start.sh
-
-# Run nginx
-CMD ["/bin/bash", "/root/start.sh"]

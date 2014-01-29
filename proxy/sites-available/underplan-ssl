@@ -1,0 +1,48 @@
+server {
+    listen               443;
+    server_name          underplan.io;
+
+    ssl                  on;
+    ssl_certificate      /etc/nginx/ssl/underplan.io.combined.crt;
+    ssl_certificate_key  /etc/nginx/ssl/underplan.io.key;
+
+    # access_log /var/log/nginx/underplan-ssl.log;
+
+    error_page 500 502 503 504 /50x.html;
+
+    location /50x.html {
+       root /var/www/errors;
+    }
+
+    location / {
+
+      location ~ ^/(images/|fonts/) {
+        access_log off;
+
+        root /site-data/underplan/programs/client/app;
+        expires max;
+
+        # proxy_cache          cache;
+        # proxy_cache_valid    any 1m;
+        # expires              1m;
+        # proxy_pass http://underplan_upstream;
+      }
+
+      if ($http_user_agent ~ "MSIE 6.0" ) {
+          rewrite ^ /browser_support.html break;
+      }
+      if ($http_user_agent ~ "MSIE 7.0" ) {
+          rewrite ^ /browser_support.html break;
+      }
+      if ($http_user_agent ~ "MSIE 8.0" ) {
+          rewrite ^ /browser_support.html break;
+      }
+
+      proxy_pass          http://underplan_upstream_ssl;
+      proxy_set_header    X-Real-IP $remote_addr;
+      proxy_http_version  1.1;
+      proxy_set_header    Upgrade $http_upgrade;
+      proxy_set_header    Connection "upgrade";
+      proxy_redirect      off;
+    }
+}

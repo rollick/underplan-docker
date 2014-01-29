@@ -1,0 +1,70 @@
+---
+  name: underplan
+  url: tcp://localhost:9090
+  dockerfile_path: ../../../
+  containers:
+    site-bundle:
+      image: underplan/site-bundle
+      env:
+        - UNDERPLAN_REPO_URL={$ UNDERPLAN_REPO_URL $}
+      volumes_from: site-data
+      cmd:
+        - /bin/bash
+        - /root/start.sh
+    db-data:
+      image: underplan/db-data
+      data-only: true
+    site-data: 
+      image: underplan/site-data
+      data-only: true
+    db: 
+      image: underplan/db
+      volumes_from: db-data
+      port_bindings:
+        27017/tcp:
+          -
+            host_ip: 127.0.0.1
+            host_port: "27017"
+      env: 
+        - AWS_S3_BUCKET=underplan
+        - AWS_ACCESS_KEY={$ AWS_ACCESS_KEY $}
+        - AWS_SECRET_KEY={$ AWS_SECRET_KEY $}
+        - MONGO_BACKUP_PASSWD={$ MONGO_BACKUP_PASSWD $}
+      cmd:
+        - /bin/bash
+        - /root/start.sh
+    site: 
+      image: underplan/site
+      volumes_from: site-data
+      links: 
+        - 
+          name: db
+          alias: db
+      env: 
+        - CONFIG_URL={$ UNDERPLAN_CONFIG_URL $}
+        - ROOT_URL={$ UNDERPLAN_ROOT_URL $}
+      cmd:
+        - /bin/bash
+        - /root/start.sh
+    proxy: 
+      image: underplan/proxy
+      volumes_from: site-data
+      port_bindings:
+        443/tcp:
+          -
+            host_ip: 
+            host_port: "443"
+        80/tcp:
+          -
+            host_ip: 
+            host_port: "80"
+      links: 
+        -
+          name: site
+          alias: upstream
+      env: 
+        - CONFIG_URL={$ UNDERPLAN_CONFIG_URL $}
+        - ROOT_URL={$ UNDERPLAN_ROOT_URL $}
+      cmd:
+        - /bin/bash
+        - /root/start.sh

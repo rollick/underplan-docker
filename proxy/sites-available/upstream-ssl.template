@@ -1,4 +1,4 @@
-upstream underplan_upstream {
+upstream underplan_upstream_ssl {
   server $UPSTREAM_PORT_3000_TCP_ADDR:$UPSTREAM_PORT_3000_TCP_PORT;
   keepalive 64;
 }

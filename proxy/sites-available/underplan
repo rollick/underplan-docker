@@ -1,51 +1,5 @@
-# proxy_cache_path /var/www/nginx_cache levels=1:2 keys_zone=cache:1m max_size=1000m inactive=600m;
-# proxy_temp_path /tmp/nginx;
-# proxy_cache_key "$scheme://$host$request_uri";
-
 server {
-    listen 80;
-    server_name underplan.it test.underplan.it;
-    client_max_body_size 500M;
-
-    # access_log /site-data/logs/underplan_proxy.log;
-    # error_log /site-data/logs/underplan_proxy_error.log;
-    
-    error_page 500 502 503 504 /50x.html;
-
-    location /50x.html {
-       root /var/www/errors;
-    }
-    
-    location / {
-
-      location ~ ^/(images/|fonts/) {
-        access_log off;
-
-        root /site-data/underplan/programs/client/app;
-        expires max;
-
-        # proxy_cache          cache;
-        # proxy_cache_valid    any 1m;
-        # expires              1m;
-        # proxy_pass http://underplan_upstream;
-      }
-
-      if ($http_user_agent ~ "MSIE 6.0" ) {
-          rewrite ^ http://underplan_upstream/browser_support.html break;
-      }
-      if ($http_user_agent ~ "MSIE 7.0" ) {
-          rewrite ^ http://underplan_upstream/browser_support.html break;
-      }
-      if ($http_user_agent ~ "MSIE 8.0" ) {
-          rewrite ^ http://underplan_upstream/browser_support.html break;
-      }
-
-      proxy_pass http://underplan_upstream;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_http_version 1.1;
-      proxy_set_header Upgrade $http_upgrade;
-      proxy_set_header Connection "upgrade";
-
-      proxy_redirect      off;
-    }
+    listen        80;
+    server_name   underplan.it underplan.io;
+    rewrite       ^ https://underplan.io$request_uri? permanent;
 }

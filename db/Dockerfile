@@ -41,6 +41,3 @@ ADD Supervisorfile /etc/supervisor/conf.d/mongo.conf
 
 # Port to expose
 EXPOSE 27017
-
-# run supervisor
-CMD ["/bin/bash", "/root/start.sh"]

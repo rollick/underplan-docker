@@ -43,6 +43,3 @@ EXPOSE 3000
 ADD start.sh $HOME/
 RUN chmod +x $HOME/start.sh
 RUN chown root: $HOME/start.sh
-
-# run supervisor
-CMD ["/bin/bash", "/root/start.sh"]
