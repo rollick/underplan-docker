@@ -21,14 +21,8 @@ RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
 RUN apt-get install -y nginx
 
-# Run nginx in foreground for monitoring by supervisord
-#RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-
 # Remove worker_processes line from nginx conf so we can set using supervisord
 RUN sed -i '/worker_processes/d' /etc/nginx/nginx.conf
-
-#RUN mkdir -p /site-data/logs/nginx/
-#RUN touch /var/log/nginx/underplan.log
 
 # Setup SSL certs
 RUN mkdir /etc/nginx/ssl
