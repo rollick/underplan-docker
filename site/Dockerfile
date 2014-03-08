@@ -22,11 +22,8 @@ ENV HOME /root
 
 RUN apt-get install -y --force-yes software-properties-common python python-setuptools
 RUN add-apt-repository ppa:chris-lea/node.js
-RUN apt-get -y update
-RUN apt-get install -y nodejs curl supervisor mongodb-clients
-
-# Install supervisor
-ADD Supervisorfile /etc/supervisor/conf.d/meteor.conf
+RUN apt-get update
+RUN apt-get install -y nodejs curl mongodb-clients phantomjs
 
 ###
 # Meteor App
@@ -35,6 +32,9 @@ ADD Supervisorfile /etc/supervisor/conf.d/meteor.conf
 RUN echo tlsv1 > $HOME/.curlrc
 RUN curl https://install.meteor.com | /bin/sh -x
 RUN npm install -g meteorite
+
+# install node runner
+RUN npm install -g forever
 
 # Port to expose
 EXPOSE 3000
