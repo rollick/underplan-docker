@@ -39,42 +39,42 @@ done
 
 if runContainer "db-data" && [ $CREATE_VOLUMES ]; then
   echo "++ Creating DB data container"
-  docker $DOCKER_OPTIONS run -name db-data -t -d underplan/db-data
+  docker $DOCKER_OPTIONS run -name db-data -t underplan/db-data true
 else
   echo "-- Skipping db data container"
 fi
 
 if runContainer "db" ; then
   echo "++ Running mongodb container"
-  docker $DOCKER_OPTIONS run -name db -volumes-from db-data -d -t -p 127.0.0.1:27017:27017 -e AWS_S3_BUCKET=underplan -e AWS_ACCESS_KEY=$AWS_ACCESS_KEY -e AWS_SECRET_KEY=$AWS_SECRET_KEY -e MONGO_BACKUP_PASSWD=$MONGO_BACKUP_PASSWD underplan/db
+  docker $DOCKER_OPTIONS run -name db -volumes-from db-data -d -t -p 127.0.0.1:27017:27017 -e AWS_S3_BUCKET=underplan -e AWS_ACCESS_KEY=$AWS_ACCESS_KEY -e AWS_SECRET_KEY=$AWS_SECRET_KEY -e MONGO_BACKUP_PASSWD=$MONGO_BACKUP_PASSWD underplan/db /root/start.sh
 else
   echo "-- Skipping DB container"
 fi
 
 if runContainer "site-data" && [ $CREATE_VOLUMES ]; then
   echo "++ Creating site data container"
-  docker $DOCKER_OPTIONS run -name site-data -t -d underplan/site-data
+  docker $DOCKER_OPTIONS run -name site-data -t underplan/site-data true
 else
   echo "-- Skipping site data container"
 fi
 
 if runContainer "site-bundle" ; then
   echo "++ Deploy site to site-data container"
-  docker $DOCKER_OPTIONS run -volumes-from site-data -e UNDERPLAN_REPO_URL=$UNDERPLAN_REPO_URL underplan/site-bundle
+  docker $DOCKER_OPTIONS run -volumes-from site-data -i -e UNDERPLAN_REPO_URL=$UNDERPLAN_REPO_URL underplan/site-bundle /root/start.sh
 else
   echo "-- Skipping site deploy"
 fi
 
 if runContainer "site" ; then
   echo "++ Running site container"
-  docker $DOCKER_OPTIONS run -name site -link db:db -volumes-from site-data -d -t -e CONFIG_URL=$UNDERPLAN_CONFIG_URL -e ROOT_URL=$UNDERPLAN_ROOT_URL underplan/site
+  docker $DOCKER_OPTIONS run -name site -link db:db -volumes-from site-data -d -t -p 127.0.0.1:3000:3000 -e CONFIG_URL=$UNDERPLAN_CONFIG_URL -e ROOT_URL=$UNDERPLAN_ROOT_URL underplan/site /root/start.sh
 else
   echo "-- Skipping site container"
 fi
 
-if runContainer "site-bundle" ; then
+if runContainer "proxy" ; then
   echo "++ Running proxy container for site"
-  docker $DOCKER_OPTIONS run -name proxy -volumes-from site-data -link site:upstream -p 80:80 -p 443:443 -d -t underplan/proxy
+  docker $DOCKER_OPTIONS run -name proxy -volumes-from site-data -link site:upstream -p 80:80 -p 443:443 -d -t underplan/proxy /root/start.sh
 else
   echo "-- Skipping proxy container"
 fi
