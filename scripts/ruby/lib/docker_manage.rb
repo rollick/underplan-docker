@@ -44,7 +44,14 @@ class DockerManage
     def get name
         if name.is_a? String
             return unless _container_exists_without_exception? name
-            return Docker::Container.get(name)
+
+            container = nil
+            begin
+                container = Docker::Container.get(name)
+            rescue Docker::Error::NotFoundError => e
+                @logger.info(name) { "not found" }
+            end
+            return container
         elsif name.is_a? Docker::Container
             return name
         else
