@@ -159,8 +159,8 @@ else
   if [ -f "${BUNDLE_PATH}/main.js" ];
   then
     f_INFO "Updating Fibers"
-    cd $BUNDLE_PATH/programs/server/node_modules
-    rm -r fibers
+    cd $BUNDLE_PATH/programs/server
+    $NPM uninstall fibers
     $NPM install fibers@1.0.1
 
     f_INFO "Replacing existing bundle."
