@@ -4,7 +4,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM stackbrew/ubuntu:13.04
+FROM stackbrew/ubuntu:13.10
 
 # Set the file maintainer
 MAINTAINER rollick
@@ -16,6 +16,11 @@ ENV HOME /root
 
 # Install Nginx
 RUN apt-get update
+
+# Ensure openssl is updated for Heart Bleed Bug
+RUN apt-get install openssl libssl1.0.0
+RUN openssl version -a
+
 RUN apt-get install -y software-properties-common python-setuptools
 RUN add-apt-repository -y ppa:nginx/stable
 RUN apt-get update
