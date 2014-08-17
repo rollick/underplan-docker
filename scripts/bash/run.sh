@@ -67,7 +67,7 @@ fi
 
 if runContainer "site" ; then
   echo "++ Running site container"
-  docker $DOCKER_OPTIONS run --name site --net host --link db:db --volumes-from site-data -d -t -p 127.0.0.1:3000:3000 -e MANDRILL_API_KEY=$MANDRILL_API_KEY -e CONFIG_URL=$UNDERPLAN_CONFIG_URL -e ROOT_URL=$UNDERPLAN_ROOT_URL underplan/site /root/start.sh
+  docker $DOCKER_OPTIONS run --name site --link db:db --volumes-from site-data -d -t -p 127.0.0.1:3000:3000 -e MANDRILL_API_KEY=$MANDRILL_API_KEY -e CONFIG_URL=$UNDERPLAN_CONFIG_URL -e ROOT_URL=$UNDERPLAN_ROOT_URL underplan/site /root/start.sh
 else
   echo "-- Skipping site container"
 fi
