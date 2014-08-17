@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Defaults
-DOCKER_OPTIONS="-H=tcp://localhost:9090";
+DOCKER_OPTIONS="-H=tcp://localhost:9094";
 CONTAINERS="db-data db site-data site-bundle site proxy"
 
 usage () {
@@ -30,6 +30,6 @@ done
 
 for name in $CONTAINERS; do
     echo "++ Building underplan/$name."
-    docker $DOCKER_OPTIONS build -t underplan/$name $name
+    docker $DOCKER_OPTIONS build -rmi -t underplan/$name $name
     echo ""
 done

@@ -4,7 +4,7 @@
 ############################################################
 
 # Set the base image to use to Ubuntu
-FROM stackbrew/ubuntu:13.04
+FROM ubuntu:13.10
 
 # Set the file maintainer
 MAINTAINER rollick
