@@ -10,7 +10,7 @@
 #  ....
 
 # Set the base image to use to Ubuntu
-FROM stackbrew/ubuntu:13.04
+FROM ubuntu:13.10
 
 # Set the file maintainer
 MAINTAINER rollick
@@ -18,12 +18,13 @@ MAINTAINER rollick
 ENV HOME /root
 
 ###
-# Install Node
+# Install Node / nvm requirements
 
-RUN apt-get install -y --force-yes software-properties-common python python-setuptools
-RUN add-apt-repository ppa:chris-lea/node.js
 RUN apt-get update
-RUN apt-get install -y nodejs curl mongodb-clients phantomjs
+RUN apt-get install -y git curl mongodb-clients phantomjs
+RUN git clone https://github.com/creationix/nvm.git /.nvm
+RUN echo ". /.nvm/nvm.sh" >> /etc/bash.bashrc
+RUN /bin/bash -c '. /.nvm/nvm.sh && nvm install v0.10.30 && nvm use v0.10.30 && nvm alias default v0.10.30 && ln -s /.nvm/v0.10.30/bin/node /usr/bin/node && ln -s /.nvm/v0.10.30/bin/npm /usr/bin/npm'
 
 ###
 # Meteor App
@@ -31,7 +32,7 @@ RUN apt-get install -y nodejs curl mongodb-clients phantomjs
 # install meteor
 RUN echo tlsv1 > $HOME/.curlrc
 RUN curl https://install.meteor.com | /bin/sh -x
-RUN npm install -g meteorite
+RUN npm install meteorite
 
 # install node runner
 RUN npm install -g forever
