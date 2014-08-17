@@ -6,7 +6,7 @@ if [[ -z LOCK_FILE ]]; then
   touch LOCK_FILE
 else
   echo "++ Restore already running"
-  return 0
+  exit 1
 fi
 
 touch LOCK_FILE
