@@ -2,14 +2,12 @@
 
 LOCK_FILE="/tmp/db_restore.lck"
 
-if [[ -z LOCK_FILE ]]; then
-  touch LOCK_FILE
+if [ ! -f $LOCK_FILE ]; then
+  touch $LOCK_FILE
 else
   echo "++ Restore already running"
   exit 1
 fi
-
-touch LOCK_FILE
 
 MONGO_DIR=$1
 MONGORESTORE_PATH="/usr/bin/mongorestore"
@@ -54,3 +52,4 @@ fi
 
 # Delete dump file and directory
 rm -Rf $BACKUP_FILENAME $BACKUP_DIR
+rem $LOCK_FILE
