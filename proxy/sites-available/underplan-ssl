@@ -16,13 +16,13 @@ server {
     }
 
     location ~ ^/(images|fonts) {
-      root /site-data/underplan/programs/client/app;
+      root /site-data/underplan/programs/web.browser/app;
       access_log off;
       expires max;
     }
 
     location ~* "^/[a-z0-9]{40}\.(css|js)$" {
-      root /site-data/underplan/programs/client;
+      root /site-data/underplan/programs/web.browser;
       access_log off;
       expires max;
     }
