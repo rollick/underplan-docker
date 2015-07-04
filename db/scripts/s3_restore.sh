@@ -52,4 +52,4 @@ fi
 
 # Delete dump file and directory
 rm -Rf $BACKUP_FILENAME $BACKUP_DIR
-rem $LOCK_FILE
+rm $LOCK_FILE
